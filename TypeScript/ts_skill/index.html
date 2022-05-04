@@ -1,0 +1,475 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>TypeScript小技巧 | DailyTvi</title><meta name="keywords" content="TypeScript"><meta name="author" content="Tvi"><meta name="copyright" content="Tvi"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="TypeScript 是一门语言，有很多语法，和那些只需要熟悉下 API 的库的层次不太一样，它更灵活，当然也会有很多小技巧。 这篇文章就来分享一些很多人不知道的小技巧吧，都是学完就能用起来的那种。 keyof anyTypeScript 有一个内置类型叫做 Record，它的作用是根据传入的索引和值的类型构造新的索引类型。它的实现就是通过映射类型的语法构造一个索引类型： 1type Record">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TypeScript小技巧">
+<meta property="og:url" content="https://chaojima.github.io/DailyTvi/TypeScript/ts_skill/index.html">
+<meta property="og:site_name" content="DailyTvi">
+<meta property="og:description" content="TypeScript 是一门语言，有很多语法，和那些只需要熟悉下 API 的库的层次不太一样，它更灵活，当然也会有很多小技巧。 这篇文章就来分享一些很多人不知道的小技巧吧，都是学完就能用起来的那种。 keyof anyTypeScript 有一个内置类型叫做 Record，它的作用是根据传入的索引和值的类型构造新的索引类型。它的实现就是通过映射类型的语法构造一个索引类型： 1type Record">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.leixue.com/uploads/2019/08/TypeScript.png!760">
+<meta property="article:published_time" content="2022-05-04T07:45:45.250Z">
+<meta property="article:modified_time" content="2022-05-04T07:54:46.323Z">
+<meta property="article:author" content="Tvi">
+<meta property="article:tag" content="TypeScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.leixue.com/uploads/2019/08/TypeScript.png!760"><link rel="shortcut icon" href="/DailyTvi/img/favicon.png"><link rel="canonical" href="https://chaojima.github.io/DailyTvi/TypeScript/ts_skill/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/DailyTvi/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/DailyTvi/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: Tvi","link":"链接: ","source":"来源: DailyTvi","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'TypeScript小技巧',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-05-04 15:54:46'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-footer-beautify@1.0.0/lib/runtime.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/l-lin/font-awesome-animation/dist/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://unpkg.zhimg.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/hexo-butterfly-tag-plugins-plus@latest/lib/carousel-touch.min.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/DailyTvi/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/DailyTvi/archives/"><div class="headline">文章</div><div class="length-num">8</div></a></div><div class="data-item"><a href="/DailyTvi/tags/"><div class="headline">标签</div><div class="length-num">14</div></a></div><div class="data-item"><a href="/DailyTvi/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/DailyTvi/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/DailyTvi/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></li><li><a class="site-page child" href="/DailyTvi/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/DailyTvi/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-fish"></i><span> 娱乐</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/DailyTvi/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/DailyTvi/bangumi/"><i class="fa-fw fas fa-video"></i><span> 番剧</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/DailyTvi/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-bars"></i><span> 其他</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/DailyTvi/collection/"><i class="fa-fw fa-solid fa-atom"></i><span> 网址收藏</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/DailyTvi/about/"><i class="fa-fw fas fa-heart"></i><span> 关于&amp;留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://www.leixue.com/uploads/2019/08/TypeScript.png!760')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/DailyTvi/">DailyTvi</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/DailyTvi/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/DailyTvi/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></li><li><a class="site-page child" href="/DailyTvi/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/DailyTvi/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-fish"></i><span> 娱乐</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/DailyTvi/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/DailyTvi/bangumi/"><i class="fa-fw fas fa-video"></i><span> 番剧</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/DailyTvi/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-bars"></i><span> 其他</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/DailyTvi/collection/"><i class="fa-fw fa-solid fa-atom"></i><span> 网址收藏</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/DailyTvi/about/"><i class="fa-fw fas fa-heart"></i><span> 关于&amp;留言板</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">TypeScript小技巧</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-05-04T07:45:45.250Z" title="发表于 2022-05-04 15:45:45">2022-05-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-05-04T07:54:46.323Z" title="更新于 2022-05-04 15:54:46">2022-05-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/DailyTvi/categories/TypeScript/">TypeScript</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="TypeScript小技巧"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/DailyTvi/TypeScript/ts_skill/#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/DailyTvi/TypeScript/ts_skill/" itemprop="commentCount"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>TypeScript 是一门语言，有很多语法，和那些只需要熟悉下 API 的库的层次不太一样，它更灵活，当然也会有很多小技巧。</p>
+<p>这篇文章就来分享一些很多人不知道的小技巧吧，都是学完就能用起来的那种。</p>
+<h2 id="keyof-any"><a href="#keyof-any" class="headerlink" title="keyof any"></a>keyof any</h2><p>TypeScript 有一个内置类型叫做 Record，它的作用是根据传入的索引和值的类型构造新的索引类型。<br><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/997afb8b46844890960c9e42670580de~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp" alt="avatar"><br>它的实现就是通过映射类型的语法构造一个索引类型：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="title class_">Record</span>&lt;K, T&gt; = &#123; [P <span class="keyword">in</span> K]: T &#125;;</span><br></pre></td></tr></table></figure>
+
+<p>那么问题来了，这个 K 怎么约束呢？<br>有同学说 K 不是索引么？那应该是 string，也就是 K extends string。<br>但是 JS 的属性可以是 string、number、symbol 这三种类型的。<br>那我知道了，要 K extends string | number | symbol。<br>不不不，TypeScript 有个编译选项叫做 keyofStringsOnly，开启了那么就就只会用 string 作为索引，否则才是 string ｜ number | symbol：<br><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3f5668fa0b4d42b4956329c4621e8f0e~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp" alt="avatar"><br>这还与编译选项有关，那这里改怎么约束呢？</p>
+<p>看下 TS 源码里是怎么定义 Record 的：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="title class_">Record</span>&lt;K <span class="keyword">extends</span> keyof <span class="built_in">any</span>, T&gt; = &#123; [P <span class="keyword">in</span> K]: T &#125;;</span><br></pre></td></tr></table></figure>
+
+<p>它用了 keyof any，难道这个 keyof any 就能动态得到 key 支持的类型么？</p>
+<p>我们试一下，不开启 keyofStringsOnly 时：<br><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4c2c54d80969486bb53c9d3b48b4535e~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp" alt="avatar"><br>开启 keyofStringsOnly 时：<br><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ac133225ae55499a84ffa20a42b3cad9~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp" alt="avatar"><br>妙啊，这样就能动态获取当前支持的 key 的类型了。</p>
+<p>需要约束某个类型参数为索引 Key 时，用 keyof any 动态获取比写死 string | number | symbol 更好。</p>
+<h2 id="object-和-Record-lt-string-any-gt"><a href="#object-和-Record-lt-string-any-gt" class="headerlink" title="object 和 Record&lt;string, any&gt;"></a>object 和 Record&lt;string, any&gt;</h2><p>TypeScript 里有三个类型比较难区分，就是 object、Object、{} 这几个。<br>其实只要记住 object 不能接受原始类型 就可以了，其余两个差不多，只不过 {} 是个空对象，没有索引。<br>所以 number 就可以赋值给 {}、Object 类型，但是不能赋值给 object 类型：<br><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d2332720964d43f5b8866fe0920345f6~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp" alt="avatar"><br><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c80c6b9f4d6b495cb2500573f0938e8f~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp" alt="avatar"><br><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ef87ff03d71042c7981ea02b52112d2c~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp" alt="avatar"><br>其实，你看源码会发现大家不会用 object 来约束，而是用 Record&lt;string, any&gt; 来约束索引类型，这俩其实是一样的，但是 Record&lt;string, any&gt; 更语义化一些。<br>Record&lt;string, any&gt; 创建了一个 key 为任意 string，value 为任意类型的索引类型：<br><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/59e8432273b74ed6bd1773acc66d91c9~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp" alt="avatar"><br>所以，平时约束索引类型的时候就可以用 Record&lt;string, any&gt; 代替 object。</p>
+<p>而且你会在很多源码里看到这种写法，比如下面是 Nest.js 源码里的：<br><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8ac7881a2824453e953b6b0594076ec3~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp" alt="avatar"></p>
+<h2 id="readonly"><a href="#readonly" class="headerlink" title="-readonly"></a>-readonly</h2><p>映射类型可以构造一个新的索引类型，并且构造的过程中做一些修改。</p>
+<p>比如构造一个新的索引类型，把所有的 Key 变为可选：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="title class_">ToPartial</span>&lt;T&gt; = &#123; [<span class="title class_">Key</span> <span class="keyword">in</span> keyof T]?: T[<span class="title class_">Key</span>] &#125;;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/baddd159fa8942fd80b5c3c061d01d3d~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp" alt="avatar"><br>但很多人不知道也可以去掉已有的修饰的，用 - 号，减去的意思：</p>
+<p>比如去掉 ? 是 -? ：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="title class_">ToRequired</span>&lt;T&gt; = &#123; [<span class="title class_">Key</span> <span class="keyword">in</span> keyof T]-?: T[<span class="title class_">Key</span>] &#125;;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/fe9f09cbf9d34658924810878a50f584~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp" alt="avatar"><br>那去掉 readonly 自然就是 -readonly：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="title class_">ToMutable</span>&lt;T&gt; = &#123; -<span class="keyword">readonly</span> [<span class="title class_">Key</span> <span class="keyword">in</span> keyof T]: T[<span class="title class_">Key</span>] &#125;;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7150766771604f8fb2fc716250e87494~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp" alt="avatar"><br>我最近看到 Promise.all 的类型定义就用到这个了：<br><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f70549f1fe0544159074090d70c59a92~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp" alt="avatar"><br>类型参数 T 是 待处理的 promise 数组，返回值是 Promise 的 value 对应的数组，用 Awaited 取出 value 的类型。</p>
+<p>Awaited 是 TS 内置的一个高级类型，用于取出 Promise 返回值类型的：<br><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4b2dd2a037fe4fa2853326c6dd786b0a~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp" alt="avatar"><br>返回的是数组类型，那为啥还可以用映射类型的语法呢？</p>
+<p>因为数组类型也是索引类型呀，索引类型的意思就是聚合多个元素的类型，数组、对象、class 都是索引类型。</p>
+<p>当然，主要还是为了讲 -readonly 的语法，可以去掉 readonly 的修饰。</p>
+<h2 id="this"><a href="#this" class="headerlink" title="this"></a>this</h2><p>方法里可以调用 this，比如这样：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Dong</span> &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="built_in">string</span>;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">name</span> = <span class="string">&quot;dong&quot;</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">hello</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;hello, I&#x27;m &quot;</span> + <span class="variable language_">this</span>.<span class="property">name</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> dong = <span class="keyword">new</span> <span class="title class_">Dong</span>();</span><br><span class="line">dong.<span class="title function_">hello</span>();</span><br></pre></td></tr></table></figure>
+
+<p>用对象.方法名的方式调用的时候，this 就指向那个对象。</p>
+<p>但是方法也可以用 call 或者 apply 调用：<br><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/75229ba1521c42d1940c441e6e0ee0d5~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp" alt="avatar"><br>call 调用的时候，this 就变了，但这里却没有被检查出来 this 指向的错误。</p>
+<p>如何让编译器能够检查出 this 指向的错误呢？</p>
+<p>其实方法是可以指定 this 的类型的：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Dong</span> &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="built_in">string</span>;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">name</span> = <span class="string">&quot;dong&quot;</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">hello</span>(<span class="params"><span class="variable language_">this</span>: Dong</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;hello, I&#x27;m &quot;</span> + <span class="variable language_">this</span>.<span class="property">name</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样，当 call&#x2F;apply 调用的时候，就能检查出 this 指向的对象是否是对的：<br><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a0fef176aec24e27ad2513b9a04afaa7~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp" alt="avatar"><br>而且，TypeScript 也提供了一个内置的高级类型 ThisParameterType 用于提取 this 的类型：<br><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bb76c84e98474ea0a956db3fbf193ecb~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp" alt="avatar"><br>它的实现很简单，就是通过模式匹配提取 this 的类型到 infer 声明的局部变量里返回：<br><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f936e6194a704e9698935b53b68347f4~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp" alt="avatar"></p>
+<h2 id="和"><a href="#和" class="headerlink" title="? 和 ??"></a>? 和 ??</h2><p>最后是一个比较常用的语法，TS 支持 ? 的可选链语法，也可以通过 ?? 指定默认值：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> dong = data?.<span class="property">name</span> ?? <span class="string">&quot;dong&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>编译之后会变成这样：</p>
+<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2d313aa68db44397b5d79556fcb550d4~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp" alt="avatar"><br>做了空值检查，也设置了默认值 dong。</p>
+<p>很简单和有用的一个语法，但很多人写 ts 还是没把它用起来。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>TypeScript 有很多灵活的语法，小技巧很多。<br>今天分享了一些大家可能不知道的技巧：</p>
+<blockquote>
+<p>keyof any 可以动态获取 key 支持的类型，根据 keyofStringsOnly 的编译选项，可以用来约束索引。</p>
+</blockquote>
+<blockquote>
+<p>object 不能接收原始类型，而 {} 和 Object 都可以，这是它们的区别。</p>
+</blockquote>
+<blockquote>
+<p>object 一般会用 Record&lt;string, any&gt; 代替，约束索引类型更加语义化</p>
+</blockquote>
+<blockquote>
+<p>映射类型语法可以创建索引类型，并且加上 readonly 或 ? 的修饰，其实也可以用 -readonly、-? 去掉</p>
+</blockquote>
+<blockquote>
+<p>? 和 ?? 分别代表空判断和默认值，是写 TS 很常用的一个语法</p>
+</blockquote>
+<blockquote>
+<p>this 的类型是可以约束的，而且也可以用内置的高级类型 ThisParameterTypes 来取</p>
+</blockquote>
+<p>这几个小技巧都是看一遍就会的那种，下次写 TS 类型的时候就可以用起来了。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Tvi</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://chaojima.github.io/DailyTvi/TypeScript/ts_skill/">https://chaojima.github.io/DailyTvi/TypeScript/ts_skill/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://chaojima.github.io/DailyTvi" target="_blank">DailyTvi</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/DailyTvi/tags/TypeScript/">TypeScript</a></div><div class="post_share"><div class="social-share" data-image="https://www.leixue.com/uploads/2019/08/TypeScript.png!760" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/DailyTvi/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="/DailyTvi/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/DailyTvi/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/DailyTvi/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/DailyTvi/JavaScript/js_arrary/"><img class="prev-cover" src="https://www.computerfever.com/wp-content/uploads/2016/04/javascript-featured.png" onerror="onerror=null;src='/DailyTvi/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">数组4个新增方法</div></div></a></div><div class="next-post pull-right"><a href="/DailyTvi/JavaScript/js_spread_syntax/"><img class="next-cover" src="https://www.computerfever.com/wp-content/uploads/2016/04/javascript-featured.png" onerror="onerror=null;src='/DailyTvi/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Js 展开操作符</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/DailyTvi/img/favicon.png" onerror="this.onerror=null;this.src='/DailyTvi/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Tvi</div><div class="author-info__description">每天Tvi</div></div><div class="card-info-data is-center"><div class="card-info-data-item"><a href="/DailyTvi/archives/"><div class="headline">文章</div><div class="length-num">8</div></a></div><div class="card-info-data-item"><a href="/DailyTvi/tags/"><div class="headline">标签</div><div class="length-num">14</div></a></div><div class="card-info-data-item"><a href="/DailyTvi/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ChaoJiMa"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/ChaoJiMa" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:894905469@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://space.bilibili.com/46974858" target="_blank" title="Bilibili"><i class="fab fa-bilibili"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎访问<div class="twopeople"></div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#keyof-any"><span class="toc-number">1.</span> <span class="toc-text">keyof any</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#object-%E5%92%8C-Record-lt-string-any-gt"><span class="toc-number">2.</span> <span class="toc-text">object 和 Record&lt;string, any&gt;</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#readonly"><span class="toc-number">3.</span> <span class="toc-text">-readonly</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#this"><span class="toc-number">4.</span> <span class="toc-text">this</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%92%8C"><span class="toc-number">5.</span> <span class="toc-text">? 和 ??</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/DailyTvi/React/react_diff/" title="React 核心 Diff 算法"><img src="https://cdn.filestackcontent.com/IEMTnwZrR2SJNoRUw6Tq" onerror="this.onerror=null;this.src='/DailyTvi/img/404.jpg'" alt="React 核心 Diff 算法"/></a><div class="content"><a class="title" href="/DailyTvi/React/react_diff/" title="React 核心 Diff 算法">React 核心 Diff 算法</a><time datetime="2022-05-04T08:31:14.955Z" title="发表于 2022-05-04 16:31:14">2022-05-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/DailyTvi/JavaScript/js_render/" title="Js 阻塞渲染"><img src="https://www.computerfever.com/wp-content/uploads/2016/04/javascript-featured.png" onerror="this.onerror=null;this.src='/DailyTvi/img/404.jpg'" alt="Js 阻塞渲染"/></a><div class="content"><a class="title" href="/DailyTvi/JavaScript/js_render/" title="Js 阻塞渲染">Js 阻塞渲染</a><time datetime="2022-05-04T08:31:10.307Z" title="发表于 2022-05-04 16:31:10">2022-05-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/DailyTvi/JavaScript/js_arrary/" title="数组4个新增方法"><img src="https://www.computerfever.com/wp-content/uploads/2016/04/javascript-featured.png" onerror="this.onerror=null;this.src='/DailyTvi/img/404.jpg'" alt="数组4个新增方法"/></a><div class="content"><a class="title" href="/DailyTvi/JavaScript/js_arrary/" title="数组4个新增方法">数组4个新增方法</a><time datetime="2022-05-04T08:30:59.654Z" title="发表于 2022-05-04 16:30:59">2022-05-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/DailyTvi/TypeScript/ts_skill/" title="TypeScript小技巧"><img src="https://www.leixue.com/uploads/2019/08/TypeScript.png!760" onerror="this.onerror=null;this.src='/DailyTvi/img/404.jpg'" alt="TypeScript小技巧"/></a><div class="content"><a class="title" href="/DailyTvi/TypeScript/ts_skill/" title="TypeScript小技巧">TypeScript小技巧</a><time datetime="2022-05-04T07:45:45.250Z" title="发表于 2022-05-04 15:45:45">2022-05-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/DailyTvi/JavaScript/js_spread_syntax/" title="Js 展开操作符"><img src="https://www.computerfever.com/wp-content/uploads/2016/04/javascript-featured.png" onerror="this.onerror=null;this.src='/DailyTvi/img/404.jpg'" alt="Js 展开操作符"/></a><div class="content"><a class="title" href="/DailyTvi/JavaScript/js_spread_syntax/" title="Js 展开操作符">Js 展开操作符</a><time datetime="2022-05-04T07:17:12.182Z" title="发表于 2022-05-04 15:17:12">2022-05-04</time></div></div></div></div></div></div></main><footer id="footer" style="background: hsla(0,0%,100%,.15);"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Tvi</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="聊天"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/DailyTvi/js/utils.js"></script><script src="/DailyTvi/js/main.js"></script><script src="/DailyTvi/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="/DailyTvi/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'hAzbrghbRVKoYdPkx8LdMbDr-gzGzoHsz',
+      appKey: 'WFBIQoOYsPCkGaaLtbsTSs42',
+      avatar: 'monsterid',
+      serverURLs: 'https://hazbrghb.lc-cn-n1-shared.com',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="https://cdn.jsdelivr.net/npm/blueimp-md5/js/md5.min.js"></script><script>window.addEventListener('load', () => {
+  const changeContent = (content) => {
+    if (content === '') return content
+
+    content = content.replace(/<img.*?src="(.*?)"?[^\>]+>/ig, '[图片]') // replace image link
+    content = content.replace(/<a[^>]+?href=["']?([^"']+)["']?[^>]*>([^<]+)<\/a>/gi, '[链接]') // replace url
+    content = content.replace(/<pre><code>.*?<\/pre>/gi, '[代码]') // replace code
+    content = content.replace(/<[^>]+>/g,"") // remove html tag
+
+    if (content.length > 150) {
+      content = content.substring(0,150) + '...'
+    }
+    return content
+  }
+
+  const getIcon = (icon, mail) => {
+    if (icon) return icon
+    let defaultIcon = '?d=monsterid'
+    let iconUrl = `https://gravatar.loli.net/avatar/${md5(mail.toLowerCase()) + defaultIcon}`
+    return iconUrl
+  }
+
+  const generateHtml = array => {
+    let result = ''
+
+    if (array.length) {
+      for (let i = 0; i < array.length; i++) {
+        result += '<div class=\'aside-list-item\'>'
+
+        if (true) {
+          const name = 'src'
+          result += `<a href='${array[i].url}' class='thumbnail'><img ${name}='${array[i].avatar}' alt='${array[i].nick}'></a>`
+        }
+
+        result += `<div class='content'>
+        <a class='comment' href='${array[i].url}' title='${array[i].content}'>${array[i].content}</a>
+        <div class='name'><span>${array[i].nick} / </span><time datetime="${array[i].date}">${btf.diffDate(array[i].date, true)}</time></div>
+        </div></div>`
+      }
+    } else {
+      result += '没有评论'
+    }
+
+    let $dom = document.querySelector('#card-newest-comments .aside-list')
+    $dom.innerHTML= result
+    window.lazyLoadInstance && window.lazyLoadInstance.update()
+    window.pjax && window.pjax.refresh($dom)
+  }
+
+  const getComment = () => {
+    const serverURL = 'https://hazbrghb.lc-cn-n1-shared.com'
+
+    var settings = {
+      "method": "GET",
+      "headers": {
+        "X-LC-Id": 'hAzbrghbRVKoYdPkx8LdMbDr-gzGzoHsz',
+        "X-LC-Key": 'WFBIQoOYsPCkGaaLtbsTSs42',
+        "Content-Type": "application/json"
+      },
+    }
+
+    fetch(`${serverURL}/1.1/classes/Comment?limit=6&order=-createdAt`,settings)
+      .then(response => response.json())
+      .then(data => {
+        const valineArray = data.results.map(function (e) {
+          return {
+            'avatar': getIcon(e.QQAvatar, e.mail),
+            'content': changeContent(e.comment),
+            'nick': e.nick,
+            'url': e.url + '#' + e.objectId,
+            'date': e.updatedAt,
+          }
+        })
+        saveToLocal.set('valine-newest-comments', JSON.stringify(valineArray), 10/(60*24))
+        generateHtml(valineArray)
+      }).catch(e => {
+        const $dom = document.querySelector('#card-newest-comments .aside-list')
+        $dom.innerHTML= "无法获取评论，请确认相关配置是否正确"
+      }) 
+  }
+
+  const newestCommentInit = () => {
+    if (document.querySelector('#card-newest-comments .aside-list')) {
+      const data = saveToLocal.get('valine-newest-comments')
+      if (data) {
+        generateHtml(JSON.parse(data))
+      } else {
+        getComment()
+      }
+    }
+  }
+
+  newestCommentInit()
+  document.addEventListener('pjax:complete', newestCommentInit)
+})</script><div class="aplayer no-destroy" data-id="60198" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="true"> </div><script>((window.gitter = {}).chat = {}).options = {
+  disableDefaultChat: true,
+};
+document.addEventListener('gitter-sidecar-ready', (e) => {
+  const GitterChat = e.detail.Chat
+  let chat
+
+  function initGitter () {
+    chat = new GitterChat({
+      room: 'DailyTvi/community',
+      activationElement: '#chat_btn'
+    });
+  }
+
+  initGitter()
+
+  if (true) {
+    document.addEventListener('pjax:complete', () => {
+      chat.destroy()
+      initGitter()
+    })
+  }
+
+})</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async="async" defer="defer"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start -->
+  <script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/hexo-github-calendar@1.21/hexo_githubcalendar.js"></script>
+  <script data-pjax>
+        function GithubCalendarConfig(){
+            var git_githubapiurl ="https://python-gitee-calendar-api.vercel.app/api?super-horse";
+            var git_color =['#ebedf0', '#fdcdec', '#fc9bd9', '#fa6ac5', '#f838b2', '#f5089f', '#c4067e', '#92055e', '#540336', '#48022f', '#30021f'];
+            var git_user ="super-horse";
+            var parent_div_git = document.getElementById('recent-posts');
+            var git_div_html = '<div class="recent-post-item" style="width:100%;height:auto;padding:10px;"> <div id="github_loading" style="width:10%;height:100%;margin:0 auto;display: block" > <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve" > <path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)" > <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite" ></animateTransform> </path> </svg> </div> <div id="github_container"></div> </div>';
+            if(parent_div_git && location.pathname =='/DailyTvi/'){
+                console.log('已挂载github calendar')
+                // parent_div_git.innerHTML=git_div_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",git_div_html) // 有报错，但不影响使用(支持pjax跳转)
+            };
+            GithubCalendar(git_githubapiurl,git_color,git_user)
+        }
+        if(document.getElementById('recent-posts')){
+            GithubCalendarConfig()
+        }
+    </script>
+    <style>#github_container{min-height:280px}@media screen and (max-width:650px) {#github_container{background-image:;min-height:0px}}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<div id="workboard"></div><div id="ghbdages" style="overflow:hidden;max-height:90px;height:auto;text-align:center;margin-top:10px"><div class="swiper-wrapper"><div class="swiper-slide"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" title="博客框架为Hexo_v5.4.0"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" style="margin-inline:5px" title="主题版本Butterfly_v3.8.2"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&amp;logo=bitdefender" alt=""/></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" title="本站项目由Github托管"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a></div><div class="swiper-slide"><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris" alt=""/></a></div></div></div><style>a.github-badge:hover:before {display:none}</style>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script async src="https://npm.elemecdn.com/hexo-butterfly-footer-beautify@1.0.0/lib/runtime.js"></script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-footer-beautify/lib/swiperbdage_init.min.js"></script><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --><script src="/DailyTvi/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/DailyTvi/live2dw/assets/wanko.model.json"},"display":{"position":"left","bottom":20,"width":200,"height":300},"mobile":{"show":false},"rect":"opacity:0.7","log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>
