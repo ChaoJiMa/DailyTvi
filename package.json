@@ -22,6 +22,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cross-env": "^10.0.0",
     "dayjs": "^1.11.13",
     "lodash": "^4.17.21",
     "next": "15.4.5",

@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   output: 'export',
-  distDir: 'build',
+  distDir: 'docs',
   basePath: "",
   Rewrites: "",
   Redirects: "",
@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
     return '894905469';
   },
   env: {
-    NODE_ENV: process.env.NEXT_PUBLIC_ENV === 'production' ? 'production' : 'development',
+    NEXT_PUBLIC_ENV: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   },
   // 路由
   // exportPathMap: async function (
