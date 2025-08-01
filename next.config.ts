@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
   distDir: 'docs',
   basePath: "",
   Rewrites: "",
+  assetPrefix: "/DailyTvi/",
   Redirects: "",
   Headers: "",
   generateBuildId: async () => {
