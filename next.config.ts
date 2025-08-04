@@ -4,9 +4,9 @@ const nextConfig: NextConfig = {
   /* config options here */
   output: 'export',
   distDir: 'docs',
-  basePath: "/DailyTvi",
+  basePath: process.env.NODE_ENV === 'production' ? '/DailyTvi' : '',
   Rewrites: "",
-  assetPrefix: "/DailyTvi/",
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/DailyTvi' : '',
   Redirects: "",
   Headers: "",
   generateBuildId: async () => {
