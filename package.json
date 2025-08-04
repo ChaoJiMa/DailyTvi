@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "next": "15.4.5",
     "axios": "^1.11.0",
     "gsap": "^3.13.0",
     "react": "19.1.0",
@@ -25,7 +26,6 @@
     "cross-env": "^10.0.0",
     "dayjs": "^1.11.13",
     "lodash": "^4.17.21",
-    "next": "15.4.5",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
