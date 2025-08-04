@@ -4,9 +4,9 @@ const nextConfig: NextConfig = {
   /* config options here */
   output: 'export',
   distDir: 'docs',
-  basePath: process.env.NODE_ENV === 'production' ? '/dailytvi.vercel.app' : '',
+  basePath: process.env.NODE_ENV === 'production' ? '/DailyTvi' : '',
   Rewrites: "",
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/dailytvi.vercel.app' : '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/DailyTvi' : '',
   Redirects: "",
   Headers: "",
   generateBuildId: async () => {
